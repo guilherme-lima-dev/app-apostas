@@ -1,9 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:ole_players_app/user/register_page.dart';
-import 'package:ole_players_app/widgets/custom_appbar.dart';
-import 'package:ole_players_app/widgets/custom_drawer_menu.dart';
-import 'package:ole_players_app/widgets/custom_login_fab.dart';
+import 'package:ole_players_app/views/user/register_page.dart';
+import 'package:ole_players_app/views/widgets/custom_appbar.dart';
+import 'package:ole_players_app/views/widgets/custom_drawer_menu.dart';
+import 'package:ole_players_app/views/widgets/custom_login_fab.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                               fontWeight: FontWeight.bold
                           ),
                           textAlign: TextAlign.center,
-                          speed: Duration(milliseconds: 100)
+                          speed: const Duration(milliseconds: 100)
                         ),
                       ],
                       onFinished: (){

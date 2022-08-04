@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ole_players_app/login/login_page.dart';
-import 'package:ole_players_app/widgets/custom_appbar.dart';
-import 'package:ole_players_app/widgets/custom_drawer_menu.dart';
-import 'package:ole_players_app/widgets/custom_login_fab.dart';
+import 'package:ole_players_app/views/login/login_page.dart';
+import 'package:ole_players_app/views/widgets/custom_appbar.dart';
+import 'package:ole_players_app/views/widgets/custom_drawer_menu.dart';
+import 'package:ole_players_app/views/widgets/custom_login_fab.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -206,7 +206,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             width: MediaQuery.of(context).size.width * .85,
                             child: TextFormField(
                               decoration: InputDecoration(
-                                hintText: 'Senha',
+                                hintText: 'Confirme sua senha',
                                 // icon: const Icon(Icons.lock, color: Colors.white),
                                 hintStyle: const TextStyle(color: Colors.black),
                                 enabledBorder: OutlineInputBorder(
@@ -297,7 +297,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       fontSize: 20,
                                     ),
                                   ),
-                                  Text("Faça o login!",
+                                  Text("Faça o views.login!",
                                     style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       color: Colors.white,

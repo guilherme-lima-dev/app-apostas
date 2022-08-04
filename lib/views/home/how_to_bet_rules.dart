@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ole_players_app/bet/bet_page.dart';
+import 'package:ole_players_app/views/bet/bet_page.dart';
 
 class HowToBetRules extends StatelessWidget {
   const HowToBetRules({Key? key}) : super(key: key);

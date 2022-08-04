@@ -10,7 +10,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
     return AppBar(
       title:
           GestureDetector(
-              child: Image.network('https://oleplayers.com/site/images/logo.png'),
+              child: Image.asset('images/logo-ole-small.png'),
               onTap: (){
                 Navigator.of(context).popUntil((route) => route.isFirst);
               },

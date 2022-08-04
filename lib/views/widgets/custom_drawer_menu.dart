@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ole_players_app/bet/bet_page.dart';
-import 'package:ole_players_app/user/register_page.dart';
+import 'package:ole_players_app/views/bet/bet_page.dart';
+import 'package:ole_players_app/views/user/register_page.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({

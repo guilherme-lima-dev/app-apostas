@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ole_players_app/login/login_page.dart';
+import 'package:ole_players_app/views/login/login_page.dart';
 
 class CustomLoginFAB extends StatelessWidget {
   const CustomLoginFAB({

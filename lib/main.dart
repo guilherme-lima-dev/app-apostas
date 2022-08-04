@@ -1,12 +1,43 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ole_players_app/home/footer_home_page.dart';
-import 'package:ole_players_app/home/home.dart';
-import 'package:ole_players_app/home/how_to_bet_rules.dart';
-import 'package:ole_players_app/widgets/accumulated_value.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:ole_players_app/app_module.dart';
+import 'package:ole_players_app/views/home/home.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ModularApp(module: AppModule(), child: const SplashscreenHome()));
+}
+
+class SplashscreenHome extends StatelessWidget {
+  const SplashscreenHome({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MediaQuery(
+      data: const MediaQueryData(),
+      child: MaterialApp(
+        home: SplashScreen(
+            seconds: 5,
+            navigateAfterSeconds: const MyApp(),
+            title: const Text(
+              'Já fez seu olé hoje?',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
+            image: Image.asset(
+              'images/logo-ole.png',
+              fit: BoxFit.fitWidth,
+            ),
+            backgroundColor: const Color(0xff00b9e8),
+            // styleTextUnderTheLoader:,
+            photoSize: 100.0,
+            loaderColor: Colors.white),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {

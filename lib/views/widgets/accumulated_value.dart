@@ -1,9 +1,11 @@
+import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AccumulatedValue extends StatefulWidget{
-  AccumulatedValue({Key? key, this.valueFormatted}) : super(key: key);
+  AccumulatedValue({Key? key, required this.valueFormatted}) : super(key: key);
 
-  String? valueFormatted;
+  String valueFormatted;
   @override
   State<AccumulatedValue> createState() => _AccumulatedValuePageState();
 
@@ -12,10 +14,12 @@ class AccumulatedValue extends StatefulWidget{
 class _AccumulatedValuePageState extends State<AccumulatedValue>{
   @override
   Widget build(BuildContext context) {
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
+          // Text(s),
           Container(
             margin: EdgeInsets.only(right: 10),
             child: const Center(
@@ -27,18 +31,10 @@ class _AccumulatedValuePageState extends State<AccumulatedValue>{
               ),
             ),
           ),
-          _Number(number: "1"),
-          _Separator(separator: "."),
-          _Number(number: "0"),
-          _Number(number: "0"),
-          _Number(number: "0"),
-          _Separator(separator: "."),
-          _Number(number: "0"),
-          _Number(number: "0"),
-          _Number(number: "0"),
-          _Separator(separator: ","),
-          _Number(number: "0"),
-          _Number(number: "0"),
+          for(var i=0; i < widget.valueFormatted.length; i++)
+            int.tryParse(widget.valueFormatted[i]) != null
+              ? _Number(number: widget.valueFormatted[i])
+              : _Separator(separator: widget.valueFormatted[i]),
         ],
       ),
     );

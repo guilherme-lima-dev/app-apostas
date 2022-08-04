@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:ole_players_app/widgets/accumulated_value.dart';
+import 'package:ole_players_app/views/widgets/accumulated_value.dart';
 
 class ContainerAccumulatedValue extends StatelessWidget {
   const ContainerAccumulatedValue({
@@ -20,16 +20,16 @@ class ContainerAccumulatedValue extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.network("https://oleplayers.com/site/images/acumulado.webp",
+              Image.asset("images/acumulado.webp",
                 width: MediaQuery.of(context).size.width * 0.7,
               ),
-              Image.network("https://oleplayers.com/site/images/personagem-3d.webp",
+              Image.asset("images/personagem-3d.webp",
                 width: MediaQuery.of(context).size.width * 0.15,
                 height: MediaQuery.of(context).size.height * 0.1,
               ),
             ],
           ),
-          AccumulatedValue(),
+          AccumulatedValue(valueFormatted: "3.000.000,00"),
         ],
       ),
     );

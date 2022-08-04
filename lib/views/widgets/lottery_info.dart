@@ -18,7 +18,8 @@ class LotteryInfo extends StatelessWidget {
           child: Text("RODADA: 2644 - INICIO: QUARTA-FEIRA, 15/06 17:06 - TÉRMINO: SÁBADO, 18/06 23:06",
             style: TextStyle(
                 color: Colors.white,
-                fontSize: 9.5
+                fontSize: 9.5,
+                fontWeight: FontWeight.bold
             ),
             textAlign: TextAlign.center,
           ),
