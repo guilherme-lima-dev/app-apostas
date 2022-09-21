@@ -1,22 +1,38 @@
 import 'dart:convert';
-
-import 'package:dio/dio.dart';
-import 'package:dio/native_imp.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:ole_players_app/service/http_client_interface.dart';
-import 'package:ole_players_app/service/matches_service.dart';
-
-class IHttpClientMock extends Mock implements IHttpClient {}
+import 'package:ole_players_app/httpClients/dio_client.dart';
+import 'package:ole_players_app/interfaces/http_client_interface.dart';
+import 'package:ole_players_app/models/user.dart';
+import 'package:ole_players_app/services/matches_service.dart';
+import 'mocks.dart';
+import 'package:ole_players_app/endpoints.dart' as endpoints;
 
 void main() {
+  final client = IHttpClientMock();
   test('deve retornar todas as matches', () async {
-    final client = IHttpClientMock();
     when(() => client.get(any())).thenAnswer((_) async => jsonDecode(jsonResponse));
 
     final service = MatchesService(client);
-    final modelList = await service.getAll();
+    final modelList = await service.getAll("1");
     expect(modelList[0].teamOwner?.name, "Boca");
+  });
+
+  test('deve retornar o token de login', () async {
+    final client = DioClient();
+    try{
+      final result = await client.post("${endpoints.url}/auth/login", {'username': 'guigui', 'password': 'guilherme20'});
+
+      final token = result['data']['token'];
+      if(token != null) {
+        final user = await client.get("${endpoints.url}/user", token);
+
+        print(User.fromJson(user));
+      }
+      expect("".runtimeType, token.runtimeType);
+    }catch(e){
+      print("login invalido!");
+    }
   });
 }
 

@@ -1,12 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:ole_players_app/app_module.dart';
+import 'package:ole_players_app/controllers/auth/auth_controller.dart';
+import 'package:ole_players_app/controllers/lottery/lottery_controller.dart';
+import 'package:ole_players_app/controllers/matches/matches_controller.dart';
+import 'package:ole_players_app/httpClients/dio_client.dart';
+import 'package:ole_players_app/interfaces/http_client_interface.dart';
+import 'package:ole_players_app/services/auth_service.dart';
+import 'package:ole_players_app/services/lottery_service.dart';
+import 'package:ole_players_app/services/matches_service.dart';
 import 'package:ole_players_app/views/home/home.dart';
+import 'package:provider/provider.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 void main() {
-  runApp(ModularApp(module: AppModule(), child: const SplashscreenHome()));
+  runApp(const SplashscreenHome());
 }
 
 class SplashscreenHome extends StatelessWidget {
@@ -45,12 +51,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'OlePlayers',
-      theme: ThemeData(
-        primarySwatch: buildMaterialColor(Color(0xff00b9e8)),
+    return MultiProvider(
+      providers: [
+        Provider<IHttpClient>(create: (_) => DioClient()),
+        Provider<MatchesService>(create: (context) => MatchesService(context.read())),
+        Provider<LotteryService>(create: (context) => LotteryService(context.read())),
+        Provider<AuthService>(create: (context) => AuthService(context.read())),
+        ChangeNotifierProvider<MatchesController>(create: (context) => MatchesController(context.read())),
+        ChangeNotifierProvider<LotteryController>(create: (context) => LotteryController(context.read())),
+        ChangeNotifierProvider<AuthController>(create: (context) => AuthController(context.read())),
+      ],
+      child: MaterialApp(
+        title: 'OlePlayers',
+        theme: ThemeData(
+          primarySwatch: buildMaterialColor(const Color(0xff00b9e8)),
+        ),
+        home: const HomePage(),
       ),
-      home: const HomePage(),
     );
   }
 }

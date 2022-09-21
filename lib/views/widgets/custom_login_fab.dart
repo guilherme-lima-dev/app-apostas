@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ole_players_app/views/login/login_page.dart';
+import 'package:ole_players_app/views/user/login/login_page.dart';
 
 class CustomLoginFAB extends StatelessWidget {
   const CustomLoginFAB({
@@ -15,7 +15,7 @@ class CustomLoginFAB extends StatelessWidget {
         child: FloatingActionButton(
           onPressed: (){
             Navigator.push(context,
-              MaterialPageRoute(builder: (context) => LoginPage())
+              MaterialPageRoute(builder: (context) => const LoginPage())
             );
           },
           tooltip: 'Login',

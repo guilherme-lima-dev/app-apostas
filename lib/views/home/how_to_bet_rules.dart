@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ole_players_app/views/bet/base_bet_guess.dart';
 import 'package:ole_players_app/views/bet/bet_page.dart';
 
 class HowToBetRules extends StatelessWidget {
@@ -9,10 +10,11 @@ class HowToBetRules extends StatelessWidget {
     return FittedBox(
       child: Container(
         color: const Color(0xff00B9E8),
-        height: MediaQuery.of(context).size.height * 0.80,
+        height: MediaQuery.of(context).size.height * 0.85,
         width: MediaQuery.of(context).size.width * 1,
         padding: const EdgeInsets.only(top: 15),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text("Como apostar",
               style: TextStyle(
@@ -120,8 +122,10 @@ class HowToBetRules extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 50),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.03,
+            ),
+            SizedBox(
               child: TextButton(
                   style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
@@ -140,7 +144,7 @@ class HowToBetRules extends StatelessWidget {
                   ),
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const BetPage())
+                        MaterialPageRoute(builder: (context) => const BaseBetGuess())
                     );
                   },
                   child: Container(

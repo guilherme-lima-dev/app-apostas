@@ -7,7 +7,7 @@ class FooterHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-        aspectRatio: 1/1.5,
+        aspectRatio: 1/.65,
         child: Container(
           color: Color(0xff2F2E2E),
           child: Column(
@@ -34,7 +34,7 @@ class FooterHomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onTap: () => launchUrl(Uri(scheme: "tel", path: "+55(11)2628-0006")),
+                      onTap: ()async => await launch(Uri(scheme: "tel", path: "+55(11)2628-0006").toString()),
                     ),
                     GestureDetector(
                       child: Container(
@@ -47,31 +47,31 @@ class FooterHomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onTap: () => launchUrl(Uri(scheme: 'mailto', path: 'sac@oleplayers.com')),
+                      onTap: ()async => await launch(Uri(scheme: 'mailto', path: 'sac@oleplayers.com').toString()),
                     ),
                   ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(top: 35),
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: Image.network("https://oleplayers.com/site/images/marke-360.png"),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 35),
-                child: Text("Liquidante",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 5),
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: Image.network("https://oleplayers.com/site/images/banco-viva.webp"),
-              )
+              // Container(
+              //   margin: EdgeInsets.only(top: 35),
+              //   width: MediaQuery.of(context).size.width * 0.7,
+              //   child: Image.network("https://oleplayers.com/site/images/marke-360.png"),
+              // ),
+              // Container(
+              //   margin: EdgeInsets.only(top: 35),
+              //   child: Text("Liquidante",
+              //     style: TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 20,
+              //       fontWeight: FontWeight.bold
+              //     ),
+              //   ),
+              // ),
+              // Container(
+              //   margin: EdgeInsets.only(top: 5),
+              //   width: MediaQuery.of(context).size.width * 0.7,
+              //   child: Image.network("https://oleplayers.com/site/images/banco-viva.webp"),
+              // )
             ],
           ),
         ),
