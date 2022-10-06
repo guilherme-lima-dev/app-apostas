@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ole_players_app/controllers/auth/auth_controller.dart';
+import 'package:ole_players_app/controllers/bet/bet_controller.dart';
 import 'package:ole_players_app/controllers/lottery/lottery_controller.dart';
 import 'package:ole_players_app/controllers/matches/matches_controller.dart';
 import 'package:ole_players_app/httpClients/dio_client.dart';
 import 'package:ole_players_app/interfaces/http_client_interface.dart';
 import 'package:ole_players_app/services/auth_service.dart';
+import 'package:ole_players_app/services/bet_service.dart';
 import 'package:ole_players_app/services/lottery_service.dart';
 import 'package:ole_players_app/services/matches_service.dart';
 import 'package:ole_players_app/views/home/home.dart';
@@ -57,9 +59,11 @@ class MyApp extends StatelessWidget {
         Provider<MatchesService>(create: (context) => MatchesService(context.read())),
         Provider<LotteryService>(create: (context) => LotteryService(context.read())),
         Provider<AuthService>(create: (context) => AuthService(context.read())),
+        Provider<BetService>(create: (context) => BetService(context.read())),
         ChangeNotifierProvider<MatchesController>(create: (context) => MatchesController(context.read())),
         ChangeNotifierProvider<LotteryController>(create: (context) => LotteryController(context.read())),
         ChangeNotifierProvider<AuthController>(create: (context) => AuthController(context.read())),
+        ChangeNotifierProvider<BetController>(create: (context) => BetController(context.read())),
       ],
       child: MaterialApp(
         title: 'OlePlayers',

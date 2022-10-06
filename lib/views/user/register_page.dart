@@ -31,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    super.initState();
     fToast = FToast();
     fToast.init(context);
   }

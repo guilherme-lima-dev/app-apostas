@@ -18,10 +18,10 @@ class MatchesController extends ValueNotifier<MatchesState>{
     }
   }
 
-  Future<void> fetchAllMatches() async{
+  Future<void> fetchAllMatches(String lotteryID) async{
     value = LoadingMatchesState();
     try{
-      matches = await _service.getAll("1");
+      matches = await _service.getAll(lotteryID);
       value = SuccessMatchesState(matches);
     }catch(e){
       value = ErrorMatchesState(e.toString());

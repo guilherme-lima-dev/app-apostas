@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:ole_players_app/controllers/auth/auth_controller.dart';
+import 'package:ole_players_app/controllers/lottery/lottery_controller.dart';
 import 'package:ole_players_app/views/bet/base_bet_guess.dart';
 import 'package:ole_players_app/views/bet/bet_page.dart';
 import 'package:ole_players_app/views/user/register_page.dart';
@@ -18,6 +19,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<LotteryController>().fetchLotteryNow();
+    });
+  }
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Map login = {'username': '', 'password': ''};
   bool showPassword = false;
@@ -28,8 +37,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final authController = context.watch<AuthController>();
     return Scaffold(
-        // appBar: CustomAppBar(),
-        // drawer: CustomDrawer(),
         body: Center(
             child: AnimatedCrossFade(
       crossFadeState:

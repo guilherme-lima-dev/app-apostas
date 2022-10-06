@@ -20,7 +20,7 @@ class DioClient implements IHttpClient{
   }
 
   @override
-  Future post(String url, Map params, [String? token]) async{
+  Future post(String url, dynamic params, [String? token]) async{
     try{
       if(token != null) dio.options.headers['Authorization'] = "Bearer $token";
       dio.options.headers['Accept'] = 'application/json';

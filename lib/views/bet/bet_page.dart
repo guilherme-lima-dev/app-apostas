@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ole_players_app/controllers/auth/auth_controller.dart';
+import 'package:ole_players_app/controllers/bet/bet_controller.dart';
+import 'package:ole_players_app/controllers/lottery/lottery_controller.dart';
 import 'package:ole_players_app/controllers/matches/matches_controller.dart';
 import 'package:ole_players_app/controllers/matches/matches_state.dart';
 import 'package:ole_players_app/httpClients/dio_client.dart';
@@ -20,70 +22,90 @@ class BetPage extends StatefulWidget {
 }
 
 class _BetPageState extends State<BetPage> {
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      var lotteryController = context.read<LotteryController>();
       var matches = context.read<MatchesController>();
       matches.setReloading();
-      if(matches.matches.isEmpty || matches.reloading <= 2){
-        matches.fetchAllMatches();
+      if (matches.matches.isEmpty || matches.reloading <= 2) {
+        matches.fetchAllMatches(lotteryController.lottery.id.toString());
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     final matches = context.watch<MatchesController>();
     final authController = context.watch<AuthController>();
+    final betController = context.watch<BetController>();
     final state = matches.value;
     late Widget child = Container();
+    List betLines = List.generate(
+        matches.matches.length,
+        (index) => {
+              "match": matches.matches[index],
+              "shotTeamOwner": 0,
+              "shotTeamVisitor": 0
+            }
+    );
 
     if (state is LoadingMatchesState) {
       child = const CircularProgressIndicator();
     }
 
     if (state is SuccessMatchesState) {
-      child = Column(
-        children: [
-          for (var i = 0; i < matches.matches.length; i++)
-            Container(
-              margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * .01),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  LogoTeam(
-                      urlImage: matches.matches[i].teamOwner!.linkLogo ?? "",
-                      abbreviationName:
-                      matches.matches[i].teamOwner!.abreviation ?? ""),
-                  const CustomInputBet(
-                    isOwner: true,
-                    actionDone: false,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    child: const Text(
-                      "X",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+      child = Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            for (var i = 0; i < matches.matches.length; i++)
+              Container(
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * .01),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    LogoTeam(
+                        urlImage: matches.matches[i].teamOwner!.linkLogo ?? "",
+                        abbreviationName:
+                            matches.matches[i].teamOwner!.abreviation ?? ""),
+                    CustomInputBet(
+                      isOwner: true,
+                      actionDone: false,
+                      onSaved: (text) {
+                        betLines[i]["shotTeamOwner"] = text == "" ? 0 : int.parse(text!);
+                      },
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                      child: const Text(
+                        "X",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  const CustomInputBet(
-                    isOwner: false,
-                    actionDone: false,
-                  ),
-                  LogoTeam(
-                      urlImage: matches.matches[i].teamVisitor!.linkLogo ?? "",
-                      abbreviationName:
-                      matches.matches[i].teamVisitor!.abreviation ?? ""),
-                ],
+                    CustomInputBet(
+                      isOwner: false,
+                      actionDone: false,
+                      onSaved: (text) {
+                        betLines[i]["shotTeamVisitor"] = text == "" ? 0 : int.parse(text!);
+                      },
+                    ),
+                    LogoTeam(
+                        urlImage: matches.matches[i].teamVisitor!.linkLogo ?? "",
+                        abbreviationName:
+                            matches.matches[i].teamVisitor!.abreviation ?? ""),
+                  ],
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
+
       );
     }
 
@@ -92,7 +114,6 @@ class _BetPageState extends State<BetPage> {
     }
 
     return Scaffold(
-
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -114,26 +135,29 @@ class _BetPageState extends State<BetPage> {
               child: CustomButtonBlack(
                 textContent: "GERAR PALPITE R\$1,00",
                 onTap: () {
-                  print("gerar palpite");
+                  if(authController.authenticated){
+                    _formKey.currentState!.save();
+                    betController.addGuess(betLines);
+                    _formKey.currentState!.reset();
+                  }
                 },
               ),
             ),
             Container(
                 margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.02),
+                    top: MediaQuery.of(context).size.height * 0.02,
+                    bottom: MediaQuery.of(context).size.height *
+                        (authController.authenticated ? 0.05 : 0.15)),
                 child: const CustomButtonBlack(textContent: "CERCAR PLACARES")),
-            Container(
-                margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.04,
-                    bottom: MediaQuery.of(context).size.height * (authController.authenticated ? 0.05  : 0.15)),
-                child: const CustomButtonGreen(textContent: "APOSTAR")),
+            // Container(
+            //     margin: EdgeInsets.only(
+            //         top: MediaQuery.of(context).size.height * 0.04,)
+            //     child: const CustomButtonGreen(textContent: "APOSTAR")),
           ],
         ),
       ),
     );
   }
-
-
 }
 
 class CustomButtonBlack extends StatelessWidget {
@@ -145,6 +169,7 @@ class CustomButtonBlack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onTap,
       child: Container(
         width: MediaQuery.of(context).size.width * 0.75,
         padding: EdgeInsets.symmetric(
@@ -160,7 +185,6 @@ class CustomButtonBlack extends StatelessWidget {
           ),
         ),
       ),
-      onTap: onTap,
     );
   }
 }
@@ -227,12 +251,18 @@ class LogoTeam extends StatelessWidget {
 }
 
 class CustomInputBet extends StatelessWidget {
-  const CustomInputBet(
-      {Key? key, required this.isOwner, required this.actionDone})
-      : super(key: key);
-
   final bool isOwner;
   final bool actionDone;
+  final void Function(String? text)? onChanged;
+  final void Function(String? text)? onSaved;
+
+  const CustomInputBet({
+    Key? key,
+    required this.isOwner,
+    required this.actionDone,
+    this.onChanged,
+    this.onSaved,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -281,6 +311,8 @@ class CustomInputBet extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
+        onChanged: onChanged,
+        onSaved: onSaved,
       ),
     );
   }

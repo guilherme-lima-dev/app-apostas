@@ -11,7 +11,7 @@ void main() {
       when(() => service.getAll("1")).thenAnswer((_) async => [Matches.stub()]);
       final controller = MatchesController(service);
 
-      await controller.fetchAllMatches();
+      await controller.fetchAllMatches("1");
       expect(controller.matches.length, 1);
   });
 }
