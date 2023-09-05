@@ -133,7 +133,8 @@ class _BaseBetGuessState extends State<BaseBetGuess> {
                             var res = await betController.newBet(
                                 authController.token,
                                 lotteryController.lottery.id.toString(),
-                                authController.user.id.toString());
+                                authController.user.id.toString()
+                            );
                             betController.resetGuesses();
                             _showToast("Aposta registrada com sucesso!",
                                 Colors.green, Icons.check);

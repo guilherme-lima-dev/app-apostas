@@ -5,6 +5,7 @@ import 'package:ole_players_app/services/bet_service.dart';
 
 class BetController extends ChangeNotifier{
   List guesses = [];
+  List matches = [];
   int counterNewGuesses = 0;
   bool loading = false;
   final BetService service;
@@ -14,6 +15,11 @@ class BetController extends ChangeNotifier{
 
   setLoading(){
     loading = !loading;
+    notifyListeners();
+  }
+
+  setMatches(List matches){
+    this.matches = matches;
     notifyListeners();
   }
 
@@ -42,6 +48,39 @@ class BetController extends ChangeNotifier{
     return guesses.isNotEmpty;
   }
 
+  mixer(){
+    var newArrayMixer = [];
+    for(var i = 0; i < guesses.length; i++){
+      for(var j = 0; j < guesses.length; j++){
+        if(i != j){ //verifica se não estamos olhando para o mesmo palpite
+          for(var k = 0; k < guesses[0].length; k++){//guesses[0].length = qtd de partidas que tem no palpite
+            for(var m = 0; m < guesses[0].length; m++){
+              //montando a nova linha de palpites misturados
+              //criação do palpite
+              var newMixerGuess = [];
+              for(var l = 0; l < guesses[0].length; l++){
+                if( l == m){ //verificar se tenho que trocar o chute ou não
+                  //para cada linha nova temos que trocar apenas um chute
+                  newMixerGuess.add(guesses[j][k]);
+                }else{
+                  newMixerGuess.add(guesses[i][l]);
+                }
+              }
+              newArrayMixer.add(newMixerGuess);
+            }
+          }
+        }
+      }
+    }
+
+    var arrayFinal = [...newArrayMixer, ...guesses];
+    guesses.clear();
+    guesses = arrayFinal;
+    counterNewGuesses = guesses.length;
+    notifyListeners();
+    setLoading();
+  }
+
   newBet(String token, String lotteryID, String userID) async{
     var data = mountBet(lotteryID, userID);
     var res = await service.newBet(token, jsonEncode(data));
@@ -63,7 +102,7 @@ class BetController extends ChangeNotifier{
       var teamOwners = [];
       var teamVisitors = [];
       guess.asMap().forEach((i, item) {
-        matches.add(item["match"].id.toString());
+        matches.add(this.matches[i].id.toString());
         teamOwners.add(item["shotTeamOwner"].toString());
         teamVisitors.add(item["shotTeamVisitor"].toString());
       });

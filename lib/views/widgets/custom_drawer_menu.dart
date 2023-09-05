@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ole_players_app/controllers/auth/auth_controller.dart';
 import 'package:ole_players_app/views/bet/base_bet_guess.dart';
 import 'package:ole_players_app/views/bet/bet_page.dart';
+import 'package:ole_players_app/views/bet/user_bets_page.dart';
 import 'package:ole_players_app/views/home/home.dart';
 import 'package:ole_players_app/views/user/login/login_page.dart';
 import 'package:ole_players_app/views/user/register_page.dart';
@@ -38,7 +39,8 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 );
               },
-              errorBuilder: (BuildContext context, Object obj, StackTrace? stack){
+              errorBuilder:
+                  (BuildContext context, Object obj, StackTrace? stack) {
                 return Container();
               },
             ),
@@ -49,7 +51,7 @@ class CustomDrawer extends StatelessWidget {
               Navigator.of(context).popUntil((route) => route.isFirst);
             },
           ),
-          if(!authController.authenticated)
+          if (!authController.authenticated)
             ListTile(
               title: const Text('Cadastro'),
               onTap: () {
@@ -64,14 +66,26 @@ class CustomDrawer extends StatelessWidget {
             title: const Text('Apostar'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const BaseBetGuess()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const BaseBetGuess()));
             },
           ),
-          if(authController.authenticated)
+          if (authController.authenticated)
+            ListTile(
+              title: const Text('Minhas apostas'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const UserBetsPage()));
+              },
+            ),
+          if (authController.authenticated)
             ListTile(
               title: const Text('Sair'),
-              onTap: () async{
+              onTap: () async {
                 await authController.logout();
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const HomePage()));

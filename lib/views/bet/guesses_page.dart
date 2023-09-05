@@ -140,7 +140,7 @@ class _GuessesPageState extends State<GuessesPage> {
                                 Row(
                                   children: [
                                     Image.network(
-                                      betController.guesses[index][i]['match']
+                                      betController.matches[i]
                                           .teamOwner!.linkLogo,
                                       width: 0.1 *
                                           MediaQuery.of(context).size.width,
@@ -163,7 +163,7 @@ class _GuessesPageState extends State<GuessesPage> {
                                       ),
                                     ),
                                     Image.network(
-                                      betController.guesses[index][i]['match']
+                                      betController.matches[i]
                                           .teamVisitor!.linkLogo,
                                       width: 0.1 *
                                           MediaQuery.of(context).size.width,

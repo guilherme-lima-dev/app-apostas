@@ -28,9 +28,11 @@ class _BetPageState extends State<BetPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var lotteryController = context.read<LotteryController>();
       var matches = context.read<MatchesController>();
+      var betController = context.read<BetController>();
       matches.setReloading();
       if (matches.matches.isEmpty || matches.reloading <= 2) {
         matches.fetchAllMatches(lotteryController.lottery.id.toString());
+        betController.setMatches(matches.matches);
       }
     });
   }
@@ -46,11 +48,13 @@ class _BetPageState extends State<BetPage> {
     List betLines = List.generate(
         matches.matches.length,
         (index) => {
-              "match": matches.matches[index],
               "shotTeamOwner": 0,
               "shotTeamVisitor": 0
-            }
-    );
+            });
+    List matchesList = List.generate(
+        matches.matches.length,
+            (index) => matches.matches[index]);
+
 
     if (state is LoadingMatchesState) {
       child = const CircularProgressIndicator();
@@ -77,7 +81,8 @@ class _BetPageState extends State<BetPage> {
                       isOwner: true,
                       actionDone: false,
                       onSaved: (text) {
-                        betLines[i]["shotTeamOwner"] = text == "" ? 0 : int.parse(text!);
+                        betLines[i]["shotTeamOwner"] =
+                            text == "" ? 0 : int.parse(text!);
                       },
                     ),
                     Container(
@@ -93,11 +98,13 @@ class _BetPageState extends State<BetPage> {
                       isOwner: false,
                       actionDone: false,
                       onSaved: (text) {
-                        betLines[i]["shotTeamVisitor"] = text == "" ? 0 : int.parse(text!);
+                        betLines[i]["shotTeamVisitor"] =
+                            text == "" ? 0 : int.parse(text!);
                       },
                     ),
                     LogoTeam(
-                        urlImage: matches.matches[i].teamVisitor!.linkLogo ?? "",
+                        urlImage:
+                            matches.matches[i].teamVisitor!.linkLogo ?? "",
                         abbreviationName:
                             matches.matches[i].teamVisitor!.abreviation ?? ""),
                   ],
@@ -105,7 +112,6 @@ class _BetPageState extends State<BetPage> {
               ),
           ],
         ),
-
       );
     }
 
@@ -135,20 +141,54 @@ class _BetPageState extends State<BetPage> {
               child: CustomButtonBlack(
                 textContent: "GERAR PALPITE R\$1,00",
                 onTap: () {
-                  if(authController.authenticated){
+                  if (authController.authenticated) {
                     _formKey.currentState!.save();
                     betController.addGuess(betLines);
+                    betController.setMatches(matchesList);
                     _formKey.currentState!.reset();
                   }
                 },
               ),
             ),
             Container(
-                margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.02,
-                    bottom: MediaQuery.of(context).size.height *
-                        (authController.authenticated ? 0.05 : 0.15)),
-                child: const CustomButtonBlack(textContent: "CERCAR PLACARES")),
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.02,
+                  bottom: MediaQuery.of(context).size.height *
+                      (authController.authenticated ? 0.05 : 0.15)),
+              child:
+              betController.loading
+              ?Container(
+                width: MediaQuery.of(context).size.width * 0.75,
+                padding: EdgeInsets.symmetric(
+                    vertical: MediaQuery.of(context).size.height * 0.01,
+                ),
+                decoration: const BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                child: const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    strokeWidth: 3,
+                  ),
+              )
+              :CustomButtonBlack(
+                textContent: "CERCAR PLACARES",
+                onTap: (){
+                  if(!(betController.guesses.length < 2) && !(betController.guesses.length > 5)){
+                    betController.setLoading();
+                    // betController.mixer();
+                  }else{
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Você só pode cercar os placares com no minimo 2 e no máximo 5 palpites!",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
             // Container(
             //     margin: EdgeInsets.only(
             //         top: MediaQuery.of(context).size.height * 0.04,)

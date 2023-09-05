@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ole_players_app/controllers/auth/auth_controller.dart';
 import 'package:ole_players_app/controllers/bet/bet_controller.dart';
+import 'package:ole_players_app/controllers/bet/user_bets_controller.dart';
 import 'package:ole_players_app/controllers/lottery/lottery_controller.dart';
 import 'package:ole_players_app/controllers/matches/matches_controller.dart';
 import 'package:ole_players_app/httpClients/dio_client.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LotteryController>(create: (context) => LotteryController(context.read())),
         ChangeNotifierProvider<AuthController>(create: (context) => AuthController(context.read())),
         ChangeNotifierProvider<BetController>(create: (context) => BetController(context.read())),
+        ChangeNotifierProvider<UserBetsController>(create: (context) => UserBetsController(context.read())),
       ],
       child: MaterialApp(
         title: 'OlePlayers',
